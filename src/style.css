@@ -1,0 +1,132 @@
+@font-face {
+    font-family: "Press Start 2P";
+    src: url("/PressStart2P.ttf") format('truetype');
+}
+
+* {
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+    background: transparent;
+}
+
+::-moz-selection {
+    background: transparent;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    outline: 0;
+    overflow: hidden;
+    font-family: "Press Start 2P", sans-serif;
+}
+
+canvas {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* UI Overlay */
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.interactive {
+    pointer-events: auto;
+}
+
+#wallet-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 8px;
+    color: white;
+    font-size: 12px;
+}
+
+#bet-controls {
+    position: absolute;
+    bottom: 30px;
+    /* Leave space for potential mobile safe areas or other bottom UI */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 90%;
+    /* Max width for mobile */
+    max-width: 600px;
+    justify-content: center;
+    flex-wrap: wrap;
+    /* Allow wrapping on very small screens */
+
+    /* Glassmorphism styles */
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bet-label {
+    width: 100%;
+    text-align: center;
+    /* Inline styles in js handle color/margin, but width ensures it breaks to top line */
+}
+
+.bet-btn {
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid #fff;
+    padding: 8px;
+    font-family: "Press Start 2P";
+    font-size: 10px;
+    color: #333;
+    min-width: 70px;
+    /* Reduced from fixed 100px */
+    flex: 1;
+    /* Allow growing */
+    text-align: center;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.bet-btn.active {
+    background: #165CF3;
+    color: white;
+    border-color: #000;
+}
+
+.bet-btn:hover {
+    transform: scale(1.05);
+}
+
+#connect-btn {
+    background: #F39C12;
+    border: 2px solid #E67E22;
+    color: white;
+    padding: 10px;
+    font-family: "Press Start 2P";
+    font-size: 12px;
+    pointer-events: auto;
+}
+
+@media (max-width: 600px) {
+    .bet-label {
+        display: none;
+    }
+}

@@ -90,22 +90,22 @@ function FastClick(layer) {
 	}
 
 	/** @type function() */
-	this.onClick = function() { return FastClick.prototype.onClick.apply(self, arguments); };
+	this.onClick = function () { return FastClick.prototype.onClick.apply(self, arguments); };
 
 	/** @type function() */
-	this.onMouse = function() { return FastClick.prototype.onMouse.apply(self, arguments); };
+	this.onMouse = function () { return FastClick.prototype.onMouse.apply(self, arguments); };
 
 	/** @type function() */
-	this.onTouchStart = function() { return FastClick.prototype.onTouchStart.apply(self, arguments); };
+	this.onTouchStart = function () { return FastClick.prototype.onTouchStart.apply(self, arguments); };
 
 	/** @type function() */
-	this.onTouchMove = function() { return FastClick.prototype.onTouchMove.apply(self, arguments); };
+	this.onTouchMove = function () { return FastClick.prototype.onTouchMove.apply(self, arguments); };
 
 	/** @type function() */
-	this.onTouchEnd = function() { return FastClick.prototype.onTouchEnd.apply(self, arguments); };
+	this.onTouchEnd = function () { return FastClick.prototype.onTouchEnd.apply(self, arguments); };
 
 	/** @type function() */
-	this.onTouchCancel = function() { return FastClick.prototype.onTouchCancel.apply(self, arguments); };
+	this.onTouchCancel = function () { return FastClick.prototype.onTouchCancel.apply(self, arguments); };
 
 	if (FastClick.notNeeded(layer)) {
 		return;
@@ -128,7 +128,7 @@ function FastClick(layer) {
 	// which is how FastClick normally stops click events bubbling to callbacks registered on the FastClick
 	// layer when they are cancelled.
 	if (!Event.prototype.stopImmediatePropagation) {
-		layer.removeEventListener = function(type, callback, capture) {
+		layer.removeEventListener = function (type, callback, capture) {
 			var rmv = Node.prototype.removeEventListener;
 			if (type === 'click') {
 				rmv.call(layer, type, callback.hijacked || callback, capture);
@@ -137,10 +137,10 @@ function FastClick(layer) {
 			}
 		};
 
-		layer.addEventListener = function(type, callback, capture) {
+		layer.addEventListener = function (type, callback, capture) {
 			var adv = Node.prototype.addEventListener;
 			if (type === 'click') {
-				adv.call(layer, type, callback.hijacked || (callback.hijacked = function(event) {
+				adv.call(layer, type, callback.hijacked || (callback.hijacked = function (event) {
 					if (!event.propagationStopped) {
 						callback(event);
 					}
@@ -159,7 +159,7 @@ function FastClick(layer) {
 		// Android browser on at least 3.2 requires a new reference to the function in layer.onclick
 		// - the old one won't work if passed to addEventListener directly.
 		oldOnClick = layer.onclick;
-		layer.addEventListener('click', function(event) {
+		layer.addEventListener('click', function (event) {
 			oldOnClick(event);
 		}, false);
 		layer.onclick = null;
@@ -205,30 +205,30 @@ FastClick.prototype.deviceIsIOSWithBadTarget = FastClick.prototype.deviceIsIOS &
  * @param {EventTarget|Element} target Target DOM element
  * @returns {boolean} Returns true if the element needs a native click
  */
-FastClick.prototype.needsClick = function(target) {
+FastClick.prototype.needsClick = function (target) {
 	'use strict';
 	switch (target.nodeName.toLowerCase()) {
 
-	// Don't send a synthetic click to disabled inputs (issue #62)
-	case 'button':
-	case 'select':
-	case 'textarea':
-		if (target.disabled) {
+		// Don't send a synthetic click to disabled inputs (issue #62)
+		case 'button':
+		case 'select':
+		case 'textarea':
+			if (target.disabled) {
+				return true;
+			}
+
+			break;
+		case 'input':
+
+			// File inputs need real clicks on iOS 6 due to a browser bug (issue #68)
+			if ((this.deviceIsIOS && target.type === 'file') || target.disabled) {
+				return true;
+			}
+
+			break;
+		case 'label':
+		case 'video':
 			return true;
-		}
-
-		break;
-	case 'input':
-
-		// File inputs need real clicks on iOS 6 due to a browser bug (issue #68)
-		if ((this.deviceIsIOS && target.type === 'file') || target.disabled) {
-			return true;
-		}
-
-		break;
-	case 'label':
-	case 'video':
-		return true;
 	}
 
 	return (/\bneedsclick\b/).test(target.className);
@@ -241,28 +241,28 @@ FastClick.prototype.needsClick = function(target) {
  * @param {EventTarget|Element} target Target DOM element
  * @returns {boolean} Returns true if the element requires a call to focus to simulate native click.
  */
-FastClick.prototype.needsFocus = function(target) {
+FastClick.prototype.needsFocus = function (target) {
 	'use strict';
 	switch (target.nodeName.toLowerCase()) {
-	case 'textarea':
-		return true;
-	case 'select':
-		return !this.deviceIsAndroid;
-	case 'input':
-		switch (target.type) {
-		case 'button':
-		case 'checkbox':
-		case 'file':
-		case 'image':
-		case 'radio':
-		case 'submit':
-			return false;
-		}
+		case 'textarea':
+			return true;
+		case 'select':
+			return !this.deviceIsAndroid;
+		case 'input':
+			switch (target.type) {
+				case 'button':
+				case 'checkbox':
+				case 'file':
+				case 'image':
+				case 'radio':
+				case 'submit':
+					return false;
+			}
 
-		// No point in attempting to focus disabled inputs
-		return !target.disabled && !target.readOnly;
-	default:
-		return (/\bneedsfocus\b/).test(target.className);
+			// No point in attempting to focus disabled inputs
+			return !target.disabled && !target.readOnly;
+		default:
+			return (/\bneedsfocus\b/).test(target.className);
 	}
 };
 
@@ -273,7 +273,7 @@ FastClick.prototype.needsFocus = function(target) {
  * @param {EventTarget|Element} targetElement
  * @param {Event} event
  */
-FastClick.prototype.sendClick = function(targetElement, event) {
+FastClick.prototype.sendClick = function (targetElement, event) {
 	'use strict';
 	var clickEvent, touch;
 
@@ -291,7 +291,7 @@ FastClick.prototype.sendClick = function(targetElement, event) {
 	targetElement.dispatchEvent(clickEvent);
 };
 
-FastClick.prototype.determineEventType = function(targetElement) {
+FastClick.prototype.determineEventType = function (targetElement) {
 	'use strict';
 
 	//Issue #159: Android Chrome Select Box does not open with a synthetic click event
@@ -306,7 +306,7 @@ FastClick.prototype.determineEventType = function(targetElement) {
 /**
  * @param {EventTarget|Element} targetElement
  */
-FastClick.prototype.focus = function(targetElement) {
+FastClick.prototype.focus = function (targetElement) {
 	'use strict';
 	var length;
 
@@ -325,7 +325,7 @@ FastClick.prototype.focus = function(targetElement) {
  *
  * @param {EventTarget|Element} targetElement
  */
-FastClick.prototype.updateScrollParent = function(targetElement) {
+FastClick.prototype.updateScrollParent = function (targetElement) {
 	'use strict';
 	var scrollParent, parentElement;
 
@@ -357,7 +357,7 @@ FastClick.prototype.updateScrollParent = function(targetElement) {
  * @param {EventTarget} targetElement
  * @returns {Element|EventTarget}
  */
-FastClick.prototype.getTargetElementFromEventTarget = function(eventTarget) {
+FastClick.prototype.getTargetElementFromEventTarget = function (eventTarget) {
 	'use strict';
 
 	// On some older browsers (notably Safari on iOS 4.1 - see issue #56) the event target may be a text node.
@@ -375,7 +375,7 @@ FastClick.prototype.getTargetElementFromEventTarget = function(eventTarget) {
  * @param {Event} event
  * @returns {boolean}
  */
-FastClick.prototype.onTouchStart = function(event) {
+FastClick.prototype.onTouchStart = function (event) {
 	'use strict';
 	var targetElement, touch, selection;
 
@@ -441,7 +441,7 @@ FastClick.prototype.onTouchStart = function(event) {
  * @param {Event} event
  * @returns {boolean}
  */
-FastClick.prototype.touchHasMoved = function(event) {
+FastClick.prototype.touchHasMoved = function (event) {
 	'use strict';
 	var touch = event.changedTouches[0], boundary = this.touchBoundary;
 
@@ -459,7 +459,7 @@ FastClick.prototype.touchHasMoved = function(event) {
  * @param {Event} event
  * @returns {boolean}
  */
-FastClick.prototype.onTouchMove = function(event) {
+FastClick.prototype.onTouchMove = function (event) {
 	'use strict';
 	if (!this.trackingClick) {
 		return true;
@@ -481,7 +481,7 @@ FastClick.prototype.onTouchMove = function(event) {
  * @param {EventTarget|HTMLLabelElement} labelElement
  * @returns {Element|null}
  */
-FastClick.prototype.findControl = function(labelElement) {
+FastClick.prototype.findControl = function (labelElement) {
 	'use strict';
 
 	// Fast path for newer browsers supporting the HTML5 control attribute
@@ -506,7 +506,7 @@ FastClick.prototype.findControl = function(labelElement) {
  * @param {Event} event
  * @returns {boolean}
  */
-FastClick.prototype.onTouchEnd = function(event) {
+FastClick.prototype.onTouchEnd = function (event) {
 	'use strict';
 	var forElement, trackingClickStart, targetTagName, scrollParent, touch, targetElement = this.targetElement;
 
@@ -599,7 +599,7 @@ FastClick.prototype.onTouchEnd = function(event) {
  *
  * @returns {void}
  */
-FastClick.prototype.onTouchCancel = function() {
+FastClick.prototype.onTouchCancel = function () {
 	'use strict';
 	this.trackingClick = false;
 	this.targetElement = null;
@@ -612,7 +612,7 @@ FastClick.prototype.onTouchCancel = function() {
  * @param {Event} event
  * @returns {boolean}
  */
-FastClick.prototype.onMouse = function(event) {
+FastClick.prototype.onMouse = function (event) {
 	'use strict';
 
 	// If a target element was never set (because a touch event was never fired) allow the event
@@ -663,7 +663,7 @@ FastClick.prototype.onMouse = function(event) {
  * @param {Event} event
  * @returns {boolean}
  */
-FastClick.prototype.onClick = function(event) {
+FastClick.prototype.onClick = function (event) {
 	'use strict';
 	var permitted;
 
@@ -696,7 +696,7 @@ FastClick.prototype.onClick = function(event) {
  *
  * @returns {void}
  */
-FastClick.prototype.destroy = function() {
+FastClick.prototype.destroy = function () {
 	'use strict';
 	var layer = this.layer;
 
@@ -719,7 +719,7 @@ FastClick.prototype.destroy = function() {
  *
  * @param {Element} layer The layer to listen on
  */
-FastClick.notNeeded = function(layer) {
+FastClick.notNeeded = function (layer) {
 	'use strict';
 	var metaViewport;
 	var chromeVersion;
@@ -730,13 +730,13 @@ FastClick.notNeeded = function(layer) {
 	}
 
 	// Chrome version - zero for other browsers
-	chromeVersion = +(/Chrome\/([0-9]+)/.exec(navigator.userAgent) || [,0])[1];
+	chromeVersion = +(/Chrome\/([0-9]+)/.exec(navigator.userAgent) || [, 0])[1];
 
 	if (chromeVersion) {
 
 		if (FastClick.prototype.deviceIsAndroid) {
 			metaViewport = document.querySelector('meta[name=viewport]');
-			
+
 			if (metaViewport) {
 				// Chrome on Android with user-scalable="no" doesn't need FastClick (issue #89)
 				if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
@@ -748,7 +748,7 @@ FastClick.notNeeded = function(layer) {
 				}
 			}
 
-		// Chrome desktop doesn't need FastClick (issue #15)
+			// Chrome desktop doesn't need FastClick (issue #15)
 		} else {
 			return true;
 		}
@@ -768,22 +768,11 @@ FastClick.notNeeded = function(layer) {
  *
  * @param {Element} layer The layer to listen on
  */
-FastClick.attach = function(layer) {
+FastClick.attach = function (layer) {
 	'use strict';
 	return new FastClick(layer);
 };
 
 
-if (typeof define !== 'undefined' && define.amd) {
 
-	// AMD. Register as an anonymous module.
-	define(function() {
-		'use strict';
-		return FastClick;
-	});
-} else if (typeof module !== 'undefined' && module.exports) {
-	module.exports = FastClick.attach;
-	module.exports.FastClick = FastClick;
-} else {
-	window.FastClick = FastClick;
-}
+export default FastClick;

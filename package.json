@@ -1,0 +1,38 @@
+{
+  "name": "flappybird-demo",
+  "version": "1.0.0",
+  "description": "FlappyBird ==========",
+  "main": "WeixinApi.js",
+  "scripts": {
+    "dev": "umi dev",
+    "build": "umi build",
+    "postinstall": "umi setup",
+    "preview": "umi preview",
+    "start": "npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charles5991/flappybird-demo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/charles5991/flappybird-demo/issues"
+  },
+  "homepage": "https://github.com/charles5991/flappybird-demo#readme",
+  "devDependencies": {
+    "@types/react": "^18.3.27",
+    "@types/react-dom": "^18.3.7",
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "@umijs/max": "^4.6.25",
+    "@umijs/plugins": "^4.6.25",
+    "@vitejs/plugin-react": "^5.1.2",
+    "antd": "^6.2.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "umi": "^4.6.25"
+  }
+}

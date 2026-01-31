@@ -1,0 +1,25 @@
+{
+    "extends": "./src/.umi/tsconfig.json",
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "jsx": "react-jsx",
+        "esModuleInterop": true,
+        "sourceMap": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+            "@@/*": [
+                "src/.umi/*"
+            ],
+            "umi": [
+                "src/.umi/exports.ts"
+            ]
+        },
+        "strict": true,
+        "allowSyntheticDefaultImports": true
+    }
+}
